@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { expoOut } from "svelte/easing";
 	import { todos, type Todo } from "../store"
-	import { fly } from "svelte/transition";
+	import { fly, slide } from "svelte/transition";
 
 	let todoItems: Todo[] = $state($todos)
 	let input = $state("")
@@ -25,7 +26,7 @@
 <h1 class="font-medium text-4xl text-green-700 mb-4">Svelte todo</h1>
 <p>Add a task</p>
 
-<section class="flex gap-4 mb-4">
+<section class="flex gap-4 mb-8">
 	<input
 		bind:value={input}
 		name="todo"
@@ -40,7 +41,11 @@
 
  <ul class="flex flex-col -mx-4">
 	{#each todoItems as todo (todo.id)}
-		<li out:fly={{x: 200, duration: 250}} class="flex justify-between items-center odd:bg-slate-50">
+		<li
+			in:fly={{x: 150, duration: 250, easing: expoOut}}
+			out:slide={{ duration:250, easing: expoOut }}
+			class="flex justify-between items-center odd:bg-slate-50"
+		>
 			<p class="px-4">{todo.task}</p>
 			<button
 				onclick={() => deleteTodo(todo.id)}
